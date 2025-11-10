@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Modules\Company\Domain\CompanyRegistry;
 use App\Scopes\CompanyScope;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -25,22 +26,27 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot(Dispatcher $events): void
     {
-        $this->app->booted(function (): void {
-            Model::booted(function (Model $model): void {
-                $table = $model->getTable();
+        $events->listen('eloquent.booted: *', function (string $event, array $payload): void {
+            /** @var Model $model */
+            $model = $payload[0] ?? null;
 
-                if (!Schema::hasTable($table) || !Schema::hasColumn($table, 'company_id')) {
-                    return;
-                }
+            if (!$model instanceof Model) {
+                return;
+            }
 
-                if ($model->hasGlobalScope(CompanyScope::class)) {
-                    return;
-                }
+            $table = $model->getTable();
 
-                $model->addGlobalScope(new CompanyScope());
-            });
+            if (!Schema::hasTable($table) || !Schema::hasColumn($table, 'company_id')) {
+                return;
+            }
+
+            if ($model->hasGlobalScope(CompanyScope::class)) {
+                return;
+            }
+
+            $model->addGlobalScope(new CompanyScope());
         });
     }
 }
