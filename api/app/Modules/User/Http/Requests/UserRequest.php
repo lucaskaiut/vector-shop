@@ -32,7 +32,6 @@ class UserRequest extends FormRequest
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'email', 'max:255', $emailRule],
                 'password' => ['required', 'string', 'min:6'],
-                'company_id' => ['required', 'integer', 'exists:companies,id'],
             ];
         }
 
@@ -40,7 +39,6 @@ class UserRequest extends FormRequest
             'name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'email', 'max:255', $emailRule],
             'password' => ['sometimes', 'string', 'min:6'],
-            'company_id' => ['sometimes', 'integer', 'exists:companies,id'],
         ];
     }
 }

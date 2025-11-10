@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Modules\Company\Domain\CompanyRegistry;
+use App\Observers\CompanyObserver;
 use App\Scopes\CompanyScope;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Model;
@@ -47,6 +48,14 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $model->addGlobalScope(new CompanyScope());
+
+            static $observed = [];
+            $class = $model::class;
+
+            if (!isset($observed[$class])) {
+                $class::observe(CompanyObserver::class);
+                $observed[$class] = true;
+            }
         });
     }
 }

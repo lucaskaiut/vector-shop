@@ -92,6 +92,15 @@ class CoreController extends Controller
             $formRequest->setContainer(app());
         }
 
+        if (method_exists($formRequest, 'setRedirector')) {
+            $formRequest->setRedirector(app('redirect'));
+        }
+
+        if (is_callable([$formRequest, 'setRouteResolver'])) {
+            $setRouteResolver = [$formRequest, 'setRouteResolver'];
+            $setRouteResolver($request->getRouteResolver());
+        }
+
         $formRequest->validateResolved();
 
         return $formRequest;
