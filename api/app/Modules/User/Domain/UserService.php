@@ -8,6 +8,8 @@ use App\Modules\User\Domain\Filters\UserFilter;
 
 class UserService extends Serivce
 {
+    protected array $with = ['profile'];
+
     public function __construct(User $user, UserFilter $filter)
     {
         parent::__construct($user, $filter);

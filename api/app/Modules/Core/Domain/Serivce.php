@@ -14,6 +14,8 @@ class Serivce
 
     protected ?QueryFilter $filter;
 
+    protected array $with = [];
+
     public function __construct(Model $model, ?QueryFilter $filter = null)
     {
         $this->model = $model;
@@ -22,35 +24,35 @@ class Serivce
 
     public function paginate(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
-        $query = $this->applyFilters($this->model->newQuery(), $filters);
+        $query = $this->applyFilters($this->newQuery(), $filters);
         return $query->paginate($perPage);
     }
 
     public function list(array $filters = []): Collection
     {
-        $query = $this->applyFilters($this->model->newQuery(), $filters);
+        $query = $this->applyFilters($this->newQuery(), $filters);
         return $query->get();
     }
 
     public function find(int|string $id, array $columns = ['*']): ?Model
     {
-        return $this->model->newQuery()->find($id, $columns);
+        return $this->newQuery()->find($id, $columns);
     }
 
     public function findOrFail(int|string $id, array $columns = ['*']): Model
     {
-        return $this->model->newQuery()->findOrFail($id, $columns);
+        return $this->newQuery()->findOrFail($id, $columns);
     }
 
     public function findOne(array $filters, array $columns = ['*']): ?Model
     {
-        $query = $this->applyFilters($this->model->newQuery(), $filters);
+        $query = $this->applyFilters($this->newQuery(), $filters);
         return $query->first($columns);
     }
 
     public function findOneOrFail(array $filters, array $columns = ['*']): Model
     {
-        $query = $this->applyFilters($this->model->newQuery(), $filters);
+        $query = $this->applyFilters($this->newQuery(), $filters);
         return $query->firstOrFail($columns);
     }
 
@@ -70,12 +72,23 @@ class Serivce
         $model->fill($data);
         $model->save();
 
-        return $model;
+        return $model->refresh();
     }
 
     public function delete(Model $model): bool
     {
         return (bool) $model->delete();
+    }
+
+    protected function newQuery(): Builder
+    {
+        $query = $this->model->newQuery();
+
+        if ($this->with !== []) {
+            $query->with($this->with);
+        }
+
+        return $query;
     }
 
     protected function applyFilters(Builder $query, array $filters): Builder

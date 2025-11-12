@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Modules\Acl\Domain\AclService;
 use App\Modules\Company\Domain\CompanyRegistry;
 use App\Observers\CompanyObserver;
 use App\Scopes\CompanyScope;
@@ -22,6 +23,12 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->alias(CompanyRegistry::class, 'company');
+
+        $this->app->singleton(AclService::class, function () {
+            return new AclService();
+        });
+
+        $this->app->alias(AclService::class, 'acl');
     }
 
     /**

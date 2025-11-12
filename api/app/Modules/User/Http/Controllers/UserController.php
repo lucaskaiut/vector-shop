@@ -36,6 +36,7 @@ class UserController extends CoreController
                 throw new \Exception('Invalid credentials');
             }
 
+            $user->load('profile');
             $token = $user->createToken('auth')->plainTextToken;
 
             return (new UserResource($user))->additional(['token' => $token])

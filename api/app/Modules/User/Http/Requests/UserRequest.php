@@ -29,6 +29,8 @@ class UserRequest extends FormRequest
 
         if ($this->isMethod('post')) {
             return [
+                'company_id' => ['sometimes', 'integer', 'exists:companies,id'],
+                'profile_id' => ['nullable', 'integer', 'exists:profiles,id'],
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'email', 'max:255', $emailRule],
                 'password' => ['required', 'string', 'min:6'],
@@ -36,6 +38,8 @@ class UserRequest extends FormRequest
         }
 
         return [
+            'company_id' => ['sometimes', 'integer', 'exists:companies,id'],
+            'profile_id' => ['sometimes', 'nullable', 'integer', 'exists:profiles,id'],
             'name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'email', 'max:255', $emailRule],
             'password' => ['sometimes', 'string', 'min:6'],

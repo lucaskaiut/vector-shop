@@ -3,6 +3,8 @@
 namespace App\Modules\Core\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Acl\Domain\AclService;
+use App\Modules\Acl\Domain\Permission;
 use App\Modules\Core\Domain\Serivce;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
@@ -104,6 +106,17 @@ class CoreController extends Controller
         $formRequest->validateResolved();
 
         return $formRequest;
+    }
+
+    protected function authorizePermission(Permission|string $permission, array $context = []): void
+    {
+        $user = request()->user();
+
+        if ($user === null) {
+            abort(Response::HTTP_FORBIDDEN, 'Usuário não autenticado.');
+        }
+
+        app(AclService::class)->authorize($user, $permission, $context);
     }
 }
 
