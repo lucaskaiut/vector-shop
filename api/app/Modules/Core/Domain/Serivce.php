@@ -2,6 +2,7 @@
 
 namespace App\Modules\Core\Domain;
 
+use App\Modules\Core\Domain\Filters\QueryFilter;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -11,9 +12,12 @@ class Serivce
 {
     protected Model $model;
 
-    public function __construct(Model $model)
+    protected ?QueryFilter $filter;
+
+    public function __construct(Model $model, ?QueryFilter $filter = null)
     {
         $this->model = $model;
+        $this->filter = $filter;
     }
 
     public function paginate(array $filters = [], int $perPage = 15): LengthAwarePaginator
@@ -76,6 +80,10 @@ class Serivce
 
     protected function applyFilters(Builder $query, array $filters): Builder
     {
+        if ($this->filter instanceof QueryFilter) {
+            return $this->filter->apply($query, $filters);
+        }
+
         foreach ($filters as $column => $value) {
             if (is_array($value)) {
                 $query->whereIn($column, $value);
