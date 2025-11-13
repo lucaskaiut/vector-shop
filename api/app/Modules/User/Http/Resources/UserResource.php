@@ -18,7 +18,6 @@ class UserResource extends JsonResource
             'profile_id' => $this->profile_id,
             'name' => $this->name,
             'email' => $this->email,
-            'permissions' => $this->profile?->permissions ?? [],
             'profile' => $this->whenLoaded('profile', function () {
                 return [
                     'id' => $this->profile?->id,

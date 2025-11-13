@@ -21,7 +21,22 @@ class Profile extends Model
     protected function permissions(): Attribute
     {
         return Attribute::make(
-            get: static fn (?array $value) => $value ?? [],
+            get: static function ($value) {
+                if ($value === null) {
+                    return [];
+                }
+
+                if (is_array($value)) {
+                    return $value;
+                }
+
+                if (is_string($value)) {
+                    $decoded = json_decode($value, true);
+                    return is_array($decoded) ? $decoded : [];
+                }
+
+                return [];
+            },
             set: static function ($value) {
                 if (!is_array($value)) {
                     $value = [];
