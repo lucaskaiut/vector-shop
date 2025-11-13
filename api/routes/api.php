@@ -16,11 +16,11 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::apiResource('profiles', ProfileController::class)
         ->middleware([
-            'index' => 'permission:user.view',
-            'show' => 'permission:user.view',
-            'store' => 'permission:user.update',
-            'update' => 'permission:user.update',
-            'destroy' => 'permission:user.update',
+            'index' => 'permission:profile.view',
+            'show' => 'permission:profile.view',
+            'store' => 'permission:profile.create',
+            'update' => 'permission:profile.update',
+            'destroy' => 'permission:profile.delete',
         ]);
 });
 

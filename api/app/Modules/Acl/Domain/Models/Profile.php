@@ -11,13 +11,6 @@ class Profile extends Model
 {
     protected $guarded = [];
 
-    protected function casts(): array
-    {
-        return [
-            'permissions' => 'array',
-        ];
-    }
-
     protected function permissions(): Attribute
     {
         return Attribute::make(
@@ -58,7 +51,7 @@ class Profile extends Model
                     }
                 }
 
-                return ['permissions' => $filtered];
+                return json_encode($filtered);
             }
         );
     }

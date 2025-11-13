@@ -9,6 +9,10 @@ enum Permission: string
     case USER_UPDATE = 'user.update';
     case USER_DELETE = 'user.delete';
     case USER_UPDATE_SELF = 'user.update_self';
+    case PROFILE_VIEW = 'profile.view';
+    case PROFILE_CREATE = 'profile.create';
+    case PROFILE_UPDATE = 'profile.update';
+    case PROFILE_DELETE = 'profile.delete';
 
     public static function values(): array
     {

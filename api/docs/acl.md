@@ -19,11 +19,19 @@
 
 ## Permissões Disponíveis
 As permissões são constantes do enum `App\Modules\Acl\Domain\Permission`:
-- `user.view`
-- `user.create`
-- `user.update`
-- `user.delete`
-- `user.update_self`
+
+### Permissões de Usuário
+- `user.view` - Visualizar usuários
+- `user.create` - Criar usuários
+- `user.update` - Atualizar usuários
+- `user.delete` - Excluir usuários
+- `user.update_self` - Atualizar o próprio perfil
+
+### Permissões de Perfil
+- `profile.view` - Visualizar perfis
+- `profile.create` - Criar perfis
+- `profile.update` - Atualizar perfis
+- `profile.delete` - Excluir perfis
 
 > Novas permissões devem ser adicionadas ao enum. Não há rota ou lógica para criar permissões dinamicamente.
 
@@ -56,8 +64,10 @@ As permissões são constantes do enum `App\Modules\Acl\Domain\Permission`:
     - `update`: `user.update` ou `user.update_self`
     - `destroy`: `user.delete`
   - Perfis:
-    - `index`, `show`: `user.view`
-    - `store`, `update`, `destroy`: `user.update`
+    - `index` / `show`: `profile.view`
+    - `store`: `profile.create`
+    - `update`: `profile.update`
+    - `destroy`: `profile.delete`
 
 ## Fluxo de Autenticação
 1. Usuário faz login (`POST /users/login`).
