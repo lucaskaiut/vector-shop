@@ -13,6 +13,10 @@ enum Permission: string
     case PROFILE_CREATE = 'profile.create';
     case PROFILE_UPDATE = 'profile.update';
     case PROFILE_DELETE = 'profile.delete';
+    case CATEGORY_VIEW = 'category.view';
+    case CATEGORY_CREATE = 'category.create';
+    case CATEGORY_UPDATE = 'category.update';
+    case CATEGORY_DELETE = 'category.delete';
 
     public static function values(): array
     {

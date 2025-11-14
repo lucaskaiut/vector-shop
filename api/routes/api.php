@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Acl\Http\Controllers\ProfileController;
+use App\Modules\Catalog\Category\Http\Controllers\CategoryController;
 use App\Modules\User\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,17 @@ Route::middleware('auth:sanctum')->group(function (): void {
             'update' => 'permission:profile.update',
             'destroy' => 'permission:profile.delete',
         ]);
+
+    Route::prefix('catalog')->group(function (): void {
+        Route::apiResource('categories', CategoryController::class)
+            ->middleware([
+                'index' => 'permission:category.view',
+                'show' => 'permission:category.view',
+                'store' => 'permission:category.create',
+                'update' => 'permission:category.update',
+                'destroy' => 'permission:category.delete',
+            ]);
+    });
 });
 
 Route::post('users/login', [UserController::class, 'login'])->name('users.login');

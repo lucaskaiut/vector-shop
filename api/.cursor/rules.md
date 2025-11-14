@@ -4,3 +4,5 @@
 
 - O projeto atual utiliza Laravel 12.10.
 
+- No projeto atual, toda e qualquer regra de negócio não específica da camada HTTP deve ser inserida no service, nunca no controller.
+
