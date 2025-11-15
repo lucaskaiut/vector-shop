@@ -17,6 +17,10 @@ enum Permission: string
     case CATEGORY_CREATE = 'category.create';
     case CATEGORY_UPDATE = 'category.update';
     case CATEGORY_DELETE = 'category.delete';
+    case ATTRIBUTE_VIEW = 'attribute.view';
+    case ATTRIBUTE_CREATE = 'attribute.create';
+    case ATTRIBUTE_UPDATE = 'attribute.update';
+    case ATTRIBUTE_DELETE = 'attribute.delete';
 
     public static function values(): array
     {

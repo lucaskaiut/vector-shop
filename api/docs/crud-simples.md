@@ -12,12 +12,17 @@ Este documento descreve o passo a passo para adicionar um novo módulo com CRUD 
 2. Criar o modelo Eloquent em `app/Modules/Product/Domain/Models/Product.php`.
    - Utilizar `$guarded = []` ou `$fillable` conforme necessidade.
    - Declarar relacionamentos com `Company`, `User` ou outros modelos.
+   - Quando precisar armazenar coleções relacionadas (ex.: opções de um atributo), prefira tabelas auxiliares com modelos dedicados em vez de colunas `json`, garantindo integrações consistentes.
+3. Se houver campos com valores limitados (status, tipos, etc.), crie um enum PHP em `app/Modules/<Modulo>/<Entity>/Domain/Enums`.
+   - Utilize métodos auxiliares como `values()` para reaproveitar as opções em validações (`Rule::in(Enum::values())`) e resources.
+   - Caso o frontend precise de labels específicas, exponha um método `label()` no enum para centralizar as traduções.
 
 ## Passo 2: Service e Filtros
 1. Criar a pasta `app/Modules/Product/Domain`.
 2. Criar `ProductService` estendendo `App\Modules\Core\Domain\Serivce`.
    - Injete o modelo e, opcionalmente, um filtro específico.
    - Configure `$with` para relações que precisam ser carregadas automaticamente.
+   - Para sincronizar coleções relacionadas (ex.: itens filhos enviados com `id` e `delete`), utilize o helper `syncRelationCommands()` disponível em `Serivce`, mantendo a regra reaproveitável em outros domínios.
 
 ```php
 class ProductService extends Serivce
@@ -51,6 +56,7 @@ class ProductFilter extends QueryFilter
 1. Criar `ProductRequest` em `app/Modules/Product/Http/Requests`.
    - Estender `FormRequest` e definir `rules()` com validações para `store` e `update`.
    - Incluir regras de relacionamento (ex.: `exists:companies,id`).
+   - Para relacionamentos aninhados, adote o padrão: entradas com `id` atualizam registros existentes, `id` + `delete=true` removem explicitamente o item e objetos sem `id` representam novos registros. Evite exclusões automáticas sem o comando do frontend.
 
 2. Criar `ProductResource` e `ProductCollection` em `app/Modules/Product/Http/Resources`.
    - `toArray` deve mapear todos os campos relevantes.

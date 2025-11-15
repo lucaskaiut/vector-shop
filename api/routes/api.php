@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Acl\Http\Controllers\ProfileController;
+use App\Modules\Catalog\Attribute\Http\Controllers\AttributeController;
 use App\Modules\Catalog\Category\Http\Controllers\CategoryController;
 use App\Modules\User\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,15 @@ Route::middleware('auth:sanctum')->group(function (): void {
                 'store' => 'permission:category.create',
                 'update' => 'permission:category.update',
                 'destroy' => 'permission:category.delete',
+            ]);
+
+        Route::apiResource('attributes', AttributeController::class)
+            ->middleware([
+                'index' => 'permission:attribute.view',
+                'show' => 'permission:attribute.view',
+                'store' => 'permission:attribute.create',
+                'update' => 'permission:attribute.update',
+                'destroy' => 'permission:attribute.delete',
             ]);
     });
 });

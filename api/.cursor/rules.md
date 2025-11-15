@@ -6,3 +6,5 @@
 
 - No projeto atual, toda e qualquer regra de negócio não específica da camada HTTP deve ser inserida no service, nunca no controller.
 
+- Sempre que houver atualização no código, deve analisar os documentos presentes em "docs" para verificar se há necessidade de atualização.
+
